@@ -1,0 +1,18 @@
+[submodule "external/miniz"]
+	path = external/miniz
+	url = https://github.com/richgel999/miniz
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git
+[submodule "external/BMSDK"]
+	path = external/BMSDK
+	url = https://github.com/bakkesmodorg/BakkesModSDK.git
+	branch = master
+[submodule "external/BakkesmodPluginTemplate"]
+	path = external/BakkesmodPluginTemplate
+	url = https://github.com/Martinii89/BakkesmodPluginTemplate.git
+	branch = master
+[submodule "external/ModUtils"]
+	path = external/ModUtils
+	url = https://github.com/smallest-cock/ModUtils.git
+	branch = main
