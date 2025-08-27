@@ -1,2 +1,2 @@
 # PluginUpdater
-Bakkesmod plugin to update my bakkesmod plugins
+A bakkesmod plugin to update my bakkesmod plugins
