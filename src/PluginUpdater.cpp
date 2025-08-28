@@ -61,26 +61,51 @@ bool PluginUpdater::copyFiles(const std::string& name, const fs::path& zipConten
 	static fs::path pluginsDir = gameWrapper->GetBakkesModPath() / "plugins";
 	static fs::path dataDir    = gameWrapper->GetBakkesModPath() / "data";
 
-	switch (getPluginType(name))
-	{
-	case PluginType::CustomQuickchat:
-		fs::copy(zipContentsDir / (name + ".dll"), pluginsDir, fs::copy_options::overwrite_existing);
-		fs::copy(zipContentsDir / name, dataDir, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
-		return true;
-	case PluginType::CustomBallOnline:
-	case PluginType::CustomTitle:
-	case PluginType::CustomStatus:
-	case PluginType::CustomGamerChair:
-	case PluginType::CustomCar:
-	case PluginType::CustomSalary:
-	case PluginType::CustomWife:
-	case PluginType::ItemmodPresetBinder:
-		fs::copy(zipContentsDir / (name + ".dll"), pluginsDir, fs::copy_options::overwrite_existing);
-		return true;
-	case PluginType::Unknown:
-	default:
+	if (getPluginType(name) == PluginType::Unknown)
 		return false;
-	}
+
+	// always copy DLL
+	fs::copy(zipContentsDir / (name + ".dll"), pluginsDir, fs::copy_options::overwrite_existing);
+
+	// copy plugin data folder if it exists
+	fs::path dataFolder = zipContentsDir / name;
+	if (fs::exists(dataFolder))
+		fs::copy(dataFolder, dataDir, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
+
+	return true;
+
+	/*
+	    auto copyDllAndDataFolder = [this, name, zipContentsDir]()
+	    {
+	        fs::copy(zipContentsDir / (name + ".dll"), pluginsDir, fs::copy_options::overwrite_existing);
+	        fs::path dataFolder = zipContentsDir / name;
+	        if (fs::exists(dataFolder))
+	            fs::copy(dataFolder, dataDir, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
+	    };
+
+	    auto justCopyDll = [this, name, zipContentsDir]()
+	    { fs::copy(zipContentsDir / (name + ".dll"), pluginsDir, fs::copy_options::overwrite_existing); };
+
+	    switch (getPluginType(name))
+	    {
+	    case PluginType::CustomQuickchat:
+	        copyDllAndDataFolder();
+	        return true;
+	    case PluginType::CustomBallOnline:
+	    case PluginType::CustomTitle:
+	    case PluginType::CustomStatus:
+	    case PluginType::CustomGamerChair:
+	    case PluginType::CustomCar:
+	    case PluginType::CustomSalary:
+	    case PluginType::CustomWife:
+	    case PluginType::ItemmodPresetBinder:
+	        justCopyDll();
+	        return true;
+	    case PluginType::Unknown:
+	    default:
+	        return false;
+	    }
+	*/
 }
 
 void PluginUpdater::addLineToCfg(const std::string& nameLower)
